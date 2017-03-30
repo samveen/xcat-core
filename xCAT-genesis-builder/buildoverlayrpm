@@ -18,7 +18,7 @@ cd /tmp/xcatgenesis.overlay.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs
 
 FILELIST=/tmp/xcatgenesis.overlay.$$/genesis.filelist
 
-rpm2cpio GENESIS_RPM |cpio -t |sort >$FILELIST
+rpm2cpio $GENESIS_RPM |cpio -t |sort >$FILELIST
 
 # Create overlay fs
 OVERLAY_LISTDIR=$DIR/overlay
