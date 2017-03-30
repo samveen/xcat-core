@@ -59,6 +59,9 @@ else
     DRACUTMODDIR=/usr/lib/dracut/modules.d/97xcat
 fi
 
+# Clean out DRACUTMODDIR if it exists
+[[ -d $DRACUTMODDIR ]] && rm -fR $DRACUTMODDIR
+
 mkdir -p $DRACUTMODDIR
 cp $DIR/* $DRACUTMODDIR
 
