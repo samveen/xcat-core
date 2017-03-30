@@ -30,7 +30,7 @@ while read f ; do
             mkdir -p ".$(dirname "$f")" && cp -a "$f" ".$f"
         fi
     fi
-done <(cat $OVERLAY_LISTDIR/* | sort -u)
+done < <(cat $OVERLAY_LISTDIR/* | sort -u)
 
 cd -
 
