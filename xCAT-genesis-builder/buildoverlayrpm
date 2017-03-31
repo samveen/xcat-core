@@ -1,0 +1,46 @@
+# Build an overlay rpm for the xCAT-genesis-base rpm on a host system.
+
+HOSTOS="$1"
+DIR=`dirname $0`
+DIR=`readlink -f $DIR`
+BUILDARCH=`uname -m`
+
+VER='2.13.2.post282.g7c53e17'
+
+GENESIS_RPM=$(ls -1 $HOME/rpmbuild/RPMS/noarch/xCAT-genesis-base-${BUILDARCH}-${VER}*.rpm|tail -n 1)
+
+echo "Warning: This script assumes that you're building the overlay against ${GENESIS_RPM}."
+echo "Press enter to continue..."; read
+
+mkdir -p /tmp/xcatgenesis.overlay.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs 
+
+cd /tmp/xcatgenesis.overlay.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs 
+
+FILELIST=/tmp/xcatgenesis.overlay.$$/genesis.filelist
+
+rpm2cpio GENESIS_RPM |cpio -t |sort >$FILELIST
+
+# Create overlay fs
+OVERLAY_LISTDIR=$DIR/overlay
+while read f ; do
+    if ! grep -q "$f$" $FILELIST; then
+        if [[ -d $f ]]; then
+            mkdir -p ".$f"
+        else
+            mkdir -p ".$(dirname "$f")" && cp -a "$f" ".$f"
+        fi
+    fi
+done <(cat $OVERLAY_LISTDIR/* | sort -u)
+
+cd -
+
+# create tar file
+echo Tarring /tmp/xcatgenesis.overlay.$$/opt into ~/rpmbuild/SOURCES/xCAT-genesis-overlay-$BUILDARCH.tar.bz2 ...
+cd /tmp/xcatgenesis.overlay.$$
+tar jvcf ~/rpmbuild/SOURCES/xCAT-genesis-overlay-$BUILDARCH.tar.bz2 opt
+
+cd -
+
+# build the rpm
+echo Building xCAT-genesis-overlay rpm from ~/rpmbuild/SOURCES/xCAT-genesis-overlay-$BUILDARCH.tar.bz2 and $DIR/xCAT-genesis-overlay.spec ...
+rpmbuild -ba $DIR/xCAT-genesis-overlay.spec 
