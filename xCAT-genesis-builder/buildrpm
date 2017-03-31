@@ -201,7 +201,7 @@ fi
 
 echo Expanding the initramfs into /tmp/xcatgenesis.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs ...
 cd /tmp/xcatgenesis.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs 
-zcat /tmp/xcatgenesis.$$.rfs|cpio -dumi
+/usr/lib/dracut/skipcpio /tmp/xcatgenesis.$$.rfs | zcat | cpio -dumi
 
 # add the perl library
 PERL_LIB_DIR="/usr/share/perl5 /usr/lib64/perl5 /usr/local/lib64/perl5 /usr/local/share/perl5"
