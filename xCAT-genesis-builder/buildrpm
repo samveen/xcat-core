@@ -151,7 +151,7 @@ fi
 
 echo Expanding the initramfs into /tmp/xcatgenesis.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs ...
 cd /tmp/xcatgenesis.$$/opt/xcat/share/xcat/netboot/genesis/$BUILDARCH/fs 
-zcat /tmp/xcatgenesis.$$.rfs|cpio -dumi
+/usr/lib/dracut/skipcpio /tmp/xcatgenesis.$$.rfs | zcat | cpio -dumi
 
 # add the perl library
 # add /usr/share/ntp/lib for Fedora26 ppc64, the ntp-perl will installed libraries under it
