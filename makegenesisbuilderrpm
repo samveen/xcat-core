@@ -1,5 +1,5 @@
 #!/bin/sh
-VER=`git describe`
+VER=`git describe --tags`
 VER=${VER/-/.post}
 VER=${VER/-/.}
 rpmbuild --version > /dev/null
