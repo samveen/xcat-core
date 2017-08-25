@@ -18,6 +18,7 @@ echo "The location for rpm building is ${RPMROOT}"
 cd `dirname $0`/xCAT-genesis-builder
 # Add version to overlay spec
 sed -i "s%^\(VER=\).*$%\1'$VER'%" buildoverlayrpm
+sed -i "s&^\(%define version\).*$&\1 $VER&" xCAT-genesis-base.spec xCAT-genesis-overlay.spec
 tar --exclude .svn -cjvf $RPMROOT/SOURCES/xCAT-genesis-builder.tar.bz2 .
 #mv -f *.gz $RPMROOT/SOURCES
 cp LICENSE.html $RPMROOT/BUILD
@@ -25,3 +26,4 @@ cp xCAT-genesis-builder.spec $RPMROOT/SOURCES
 cd -
 rm -f $RPMROOT/SRPMS/xCAT-genesis-builder-$VER*rpm $RPMROOT/RPMS/*/xCAT-genesis-builder-$VER*rpm
 rpmbuild -ba xCAT-genesis-builder/xCAT-genesis-builder.spec --define "version $VER" --define "release 1"
+cd `dirname $0`/xCAT-genesis-builder &&  git checkout xCAT-genesis-base.spec xCAT-genesis-overlay.spec && cd -
